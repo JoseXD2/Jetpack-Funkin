@@ -55,8 +55,10 @@ class Alphabet extends FlxSpriteGroup
 
 		_finalText = text;
 		this.text = text;
-		this.typed = typed;
-		isBold = bold;
+		this.typed = false;
+		typed = false;
+		bold = true;
+		isBold = true;
 
 		if (text != "")
 		{
@@ -424,6 +426,10 @@ class AlphaCharacter extends FlxSprite
 				animation.addByPrefix(letter, 'bold (', 24);
 			case ")":
 				animation.addByPrefix(letter, 'bold )', 24);
+			case "%":
+				animation.addByPrefix(letter, '% bold', 24);
+			case "#":
+				animation.addByPrefix(letter, '# bold', 24);
 			default:
 				animation.addByPrefix(letter, 'bold ' + letter, 24);
 		}

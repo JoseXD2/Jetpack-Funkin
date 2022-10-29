@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="jetpack foreground.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="foreground0000" x="0" y="0" width="5699" height="2103" frameX="-494" frameY="0" frameWidth="6193" frameHeight="2103"/>
+	<SubTexture name="foreground0001" x="0" y="0" width="5699" height="2103" frameX="-329" frameY="0" frameWidth="6193" frameHeight="2103"/>
+	<SubTexture name="foreground0002" x="0" y="0" width="5699" height="2103" frameX="-165" frameY="0" frameWidth="6193" frameHeight="2103"/>
+	<SubTexture name="foreground0003" x="0" y="0" width="5699" height="2103" frameX="0" frameY="0" frameWidth="6193" frameHeight="2103"/>
+</TextureAtlas>

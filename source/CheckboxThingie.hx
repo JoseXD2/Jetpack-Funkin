@@ -1,15 +1,14 @@
 package;
 
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
 
 class CheckboxThingie extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
 	public var daValue(default, set):Bool;
 	public var copyAlpha:Bool = true;
-	public var offsetX:Float = 0;
-	public var offsetY:Float = 0;
+	public var offsetX:Float = -10;
+	public var offsetY:Float = -25;
 	public function new(x:Float = 0, y:Float = 0, ?checked = false) {
 		super(x, y);
 

@@ -1,6 +1,5 @@
 package;
 
-import animateatlas.AtlasFrameMaker;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.effects.FlxTrail;
@@ -78,8 +77,8 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var healthColorArray:Array<Int> = [255, 0, 0];
 
-	public static var DEFAULT_CHARACTER:String = 'bf'; //In case a character is missing, it will use BF on its place
-	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
+	public static var DEFAULT_CHARACTER:String = 'boyfriend'; //In case a character is missing, it will use BF on its place
+	public function new(x:Float, y:Float, ?character:String = 'boyfriend', ?isPlayer:Bool = false)
 	{
 		super(x, y);
 
@@ -97,7 +96,7 @@ class Character extends FlxSprite
 			//case 'your character name in case you want to hardcode them instead':
 
 			default:
-				var characterPath:String = 'characters/' + curCharacter + '.json';
+				var characterPath:String = 'images/characters/' + curCharacter + '.json';
 
 				#if MODS_ALLOWED
 				var path:String = Paths.modFolders(characterPath);
@@ -111,7 +110,7 @@ class Character extends FlxSprite
 				if (!Assets.exists(path))
 				#end
 				{
-					path = Paths.getPreloadPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+					path = Paths.getPreloadPath('images/characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
 				}
 
 				#if MODS_ALLOWED
@@ -155,16 +154,11 @@ class Character extends FlxSprite
 					spriteType = "texture";
 				}
 
-				switch (spriteType){
-					
+				switch (spriteType) {
 					case "packer":
 						frames = Paths.getPackerAtlas(json.image);
-					
 					case "sparrow":
 						frames = Paths.getSparrowAtlas(json.image);
-					
-					case "texture":
-						frames = AtlasFrameMaker.construct(json.image);
 				}
 				imageFile = json.image;
 
@@ -244,14 +238,6 @@ class Character extends FlxSprite
 				}
 			}*/
 		}
-
-		switch(curCharacter)
-		{
-			case 'pico-speaker':
-				skipDance = true;
-				loadMappedAnims();
-				playAnim("shoot1");
-		}
 	}
 
 	override function update(elapsed:Float)
@@ -322,17 +308,22 @@ class Character extends FlxSprite
 	{
 		if (!debugMode && !skipDance && !specialAnim)
 		{
-			if(danceIdle)
-			{
-				danced = !danced;
-
-				if (danced)
-					playAnim('danceRight' + idleSuffix);
-				else
-					playAnim('danceLeft' + idleSuffix);
-			}
-			else if(animation.getByName('idle' + idleSuffix) != null) {
-					playAnim('idle' + idleSuffix);
+			if(PlayState.mechanictime && !PlayState.touchingground) {
+				playAnim('idle2');
+			} else if(PlayState.mechanictime && PlayState.touchingground) {
+				playAnim('running');
+			} else {
+				if(danceIdle) {
+					danced = !danced;
+		
+					if(danced)
+						playAnim('danceRight' + idleSuffix);
+					else
+						playAnim('danceLeft' + idleSuffix);
+				}
+				else if(animation.getByName('idle' + idleSuffix) != null) {
+						playAnim('idle' + idleSuffix);
+				}
 			}
 		}
 	}
@@ -366,18 +357,6 @@ class Character extends FlxSprite
 				danced = !danced;
 			}
 		}
-	}
-	
-	function loadMappedAnims():Void
-	{
-		var noteData:Array<SwagSection> = Song.loadFromJson('picospeaker', Paths.formatToSongPath(PlayState.SONG.song)).notes;
-		for (section in noteData) {
-			for (songNotes in section.sectionNotes) {
-				animationNotes.push(songNotes);
-			}
-		}
-		TankmenBG.animationNotes = animationNotes;
-		animationNotes.sort(sortAnims);
 	}
 
 	function sortAnims(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int

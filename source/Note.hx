@@ -1,12 +1,6 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.math.FlxMath;
-import flixel.util.FlxColor;
-import flash.display.BitmapData;
-import editors.ChartingState;
 
 using StringTools;
 
@@ -37,7 +31,6 @@ class Note extends FlxSprite
 
 	public var tail:Array<Note> = []; // for sustains
 	public var parent:Note;
-	public var blockHit:Bool = false; // only works for player
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
@@ -48,7 +41,6 @@ class Note extends FlxSprite
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
 
-	public var colorSwap:ColorSwap;
 	public var inEditor:Bool = false;
 
 	public var animSuffix:String = '';
@@ -122,43 +114,10 @@ class Note extends FlxSprite
 
 	private function set_noteType(value:String):String {
 		noteSplashTexture = PlayState.SONG.splashSkin;
-		if (noteData > -1 && noteData < ClientPrefs.arrowHSV.length)
-		{
-			colorSwap.hue = ClientPrefs.arrowHSV[noteData][0] / 360;
-			colorSwap.saturation = ClientPrefs.arrowHSV[noteData][1] / 100;
-			colorSwap.brightness = ClientPrefs.arrowHSV[noteData][2] / 100;
-		}
 
 		if(noteData > -1 && noteType != value) {
-			switch(value) {
-				case 'Hurt Note':
-					ignoreNote = mustPress;
-					reloadNote('HURT');
-					noteSplashTexture = 'HURTnoteSplashes';
-					colorSwap.hue = 0;
-					colorSwap.saturation = 0;
-					colorSwap.brightness = 0;
-					lowPriority = true;
-
-					if(isSustainNote) {
-						missHealth = 0.1;
-					} else {
-						missHealth = 0.3;
-					}
-					hitCausesMiss = true;
-				case 'Alt Animation':
-					animSuffix = '-alt';
-				case 'No Animation':
-					noAnimation = true;
-					noMissAnimation = true;
-				case 'GF Sing':
-					gfNote = true;
-			}
 			noteType = value;
 		}
-		noteSplashHue = colorSwap.hue;
-		noteSplashSat = colorSwap.saturation;
-		noteSplashBrt = colorSwap.brightness;
 		return value;
 	}
 
@@ -183,11 +142,9 @@ class Note extends FlxSprite
 
 		if(noteData > -1) {
 			texture = '';
-			colorSwap = new ColorSwap();
-			shader = colorSwap.shader;
 
-			x += swagWidth * (noteData);
-			if(!isSustainNote && noteData > -1 && noteData < 4) { //Doing this 'if' check to fix the warnings on Senpai songs
+			x += swagWidth * (noteData % 4);
+			if(!isSustainNote) { //Doing this 'if' check to fix the warnings on Senpai songs
 				var animToPlay:String = '';
 				switch (noteData % 4)
 				{
@@ -219,7 +176,7 @@ class Note extends FlxSprite
 			offsetX += width / 2;
 			copyAngle = false;
 
-			switch (noteData % 4)
+			switch (noteData)
 			{
 				case 0:
 					animation.play('purpleholdend');
@@ -235,12 +192,9 @@ class Note extends FlxSprite
 
 			offsetX -= width / 2;
 
-			if (PlayState.isPixelStage)
-				offsetX += 30;
-
 			if (prevNote.isSustainNote)
 			{
-				switch (prevNote.noteData % 4)
+				switch (prevNote.noteData)
 				{
 					case 0:
 						prevNote.animation.play('purplehold');
@@ -257,18 +211,8 @@ class Note extends FlxSprite
 				{
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
-
-				if(PlayState.isPixelStage) {
-					prevNote.scale.y *= 1.19;
-					prevNote.scale.y *= (6 / height); //Auto adjust note size
-				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
-			}
-
-			if(PlayState.isPixelStage) {
-				scale.y *= PlayState.daPixelZoom;
-				updateHitbox();
 			}
 		} else if(!isSustainNote) {
 			earlyHitMult = 1;
@@ -276,7 +220,6 @@ class Note extends FlxSprite
 		x += offsetX;
 	}
 
-	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;
 	var lastNoteScaleToo:Float = 1;
 	public var originalHeightForCalcs:Float = 6;
 	function reloadNote(?prefix:String = '', ?texture:String = '', ?suffix:String = '') {
@@ -302,40 +245,11 @@ class Note extends FlxSprite
 
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		if(PlayState.isPixelStage) {
-			if(isSustainNote) {
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));
-				width = width / 4;
-				height = height / 2;
-				originalHeightForCalcs = height;
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
-			} else {
-				loadGraphic(Paths.image('pixelUI/' + blahblah));
-				width = width / 4;
-				height = height / 5;
-				loadGraphic(Paths.image('pixelUI/' + blahblah), true, Math.floor(width), Math.floor(height));
-			}
-			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-			loadPixelNoteAnims();
-			antialiasing = false;
+		
+		frames = Paths.getSparrowAtlas(blahblah);
+		loadNoteAnims();
+		antialiasing = ClientPrefs.globalAntialiasing;
 
-			if(isSustainNote) {
-				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
-				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (PlayState.daPixelZoom / 2);
-				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
-
-				/*if(animName != null && !animName.endsWith('end'))
-				{
-					lastScaleY /= lastNoteScaleToo;
-					lastNoteScaleToo = (6 / height);
-					lastScaleY *= lastNoteScaleToo;
-				}*/
-			}
-		} else {
-			frames = Paths.getSparrowAtlas(blahblah);
-			loadNoteAnims();
-			antialiasing = ClientPrefs.globalAntialiasing;
-		}
 		if(isSustainNote) {
 			scale.y = lastScaleY;
 		}
@@ -345,7 +259,6 @@ class Note extends FlxSprite
 			animation.play(animName, true);
 
 		if(inEditor) {
-			setGraphicSize(ChartingState.GRID_SIZE, ChartingState.GRID_SIZE);
 			updateHitbox();
 		}
 	}
@@ -371,25 +284,6 @@ class Note extends FlxSprite
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
-	}
-
-	function loadPixelNoteAnims() {
-		if(isSustainNote) {
-			animation.add('purpleholdend', [PURP_NOTE + 4]);
-			animation.add('greenholdend', [GREEN_NOTE + 4]);
-			animation.add('redholdend', [RED_NOTE + 4]);
-			animation.add('blueholdend', [BLUE_NOTE + 4]);
-
-			animation.add('purplehold', [PURP_NOTE]);
-			animation.add('greenhold', [GREEN_NOTE]);
-			animation.add('redhold', [RED_NOTE]);
-			animation.add('bluehold', [BLUE_NOTE]);
-		} else {
-			animation.add('greenScroll', [GREEN_NOTE + 4]);
-			animation.add('redScroll', [RED_NOTE + 4]);
-			animation.add('blueScroll', [BLUE_NOTE + 4]);
-			animation.add('purpleScroll', [PURP_NOTE + 4]);
-		}
 	}
 
 	override function update(elapsed:Float)

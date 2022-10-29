@@ -1,0 +1,199 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				-40
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "downsing",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				20
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "upsing",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				4
+			],
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "leftsing",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				2,
+				4
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "rightsing",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-88,
+				-42
+			],
+			"anim": "singDOWNmiss",
+			"fps": 24,
+			"name": "downmiss",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-86,
+				24
+			],
+			"anim": "singUPmiss",
+			"fps": 24,
+			"name": "upmiss",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-87,
+				4
+			],
+			"anim": "singLEFTmiss",
+			"fps": 24,
+			"name": "leftmiss",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-86,
+				6
+			],
+			"anim": "singRIGHTmiss",
+			"fps": 24,
+			"name": "rightmiss",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-83,
+				7
+			],
+			"loop": true,
+			"fps": 24,
+			"anim": "running",
+			"indices": [],
+			"name": "run"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-100,
+				15
+			],
+			"anim": "death1",
+			"fps": 24,
+			"name": "death1",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-97,
+				-17
+			],
+			"anim": "death2",
+			"fps": 24,
+			"name": "death2",
+			"indices": []
+		},
+		{
+			"offsets": [
+				4,
+				2
+			],
+			"loop": true,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "idle instance 1"
+		},
+		{
+			"offsets": [
+				2,
+				2
+			],
+			"loop": true,
+			"fps": 24,
+			"anim": "idle2",
+			"indices": [],
+			"name": "idle2"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				17,
+				-149
+			],
+			"anim": "firstDeath",
+			"fps": 24,
+			"name": "death instance 1",
+			"indices": []
+		},
+		{
+			"loop": true,
+			"offsets": [
+				17,
+				-152
+			],
+			"anim": "deathLoop",
+			"fps": 24,
+			"name": "deathloop",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				17,
+				-152
+			],
+			"anim": "deathConfirm",
+			"fps": 24,
+			"name": "deathend",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/boyfriend",
+	"position": [
+		-770,
+		0
+	],
+	"healthicon": "boyfriend",
+	"flip_x": true,
+	"healthbar_colors": [
+		80,
+		165,
+		235
+	],
+	"camera_position": [
+		-410,
+		80
+	],
+	"sing_duration": 4,
+	"scale": 1
+}

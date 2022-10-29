@@ -1,18 +1,13 @@
 package;
 
-import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.input.keyboard.FlxKey;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 
 class PauseSubState extends MusicBeatSubstate
@@ -20,11 +15,10 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
-	var pauseMusic:FlxSound;
 	var practiceText:FlxText;
 	var skipTimeText:FlxText;
 	var skipTimeTracker:Alphabet;
@@ -37,21 +31,6 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		super();
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
-
-		if(PlayState.chartingMode)
-		{
-			menuItemsOG.insert(2, 'Leave Charting Mode');
-			
-			var num:Int = 0;
-			if(!PlayState.instance.startingSong)
-			{
-				num = 1;
-				menuItemsOG.insert(3, 'Skip Time');
-			}
-			menuItemsOG.insert(3 + num, 'End Song');
-			menuItemsOG.insert(4 + num, 'Toggle Practice Mode');
-			menuItemsOG.insert(5 + num, 'Toggle Botplay');
-		}
 		menuItems = menuItemsOG;
 
 		for (i in 0...CoolUtil.difficulties.length) {
@@ -59,18 +38,6 @@ class PauseSubState extends MusicBeatSubstate
 			difficultyChoices.push(diff);
 		}
 		difficultyChoices.push('BACK');
-
-
-		pauseMusic = new FlxSound();
-		if(songName != null) {
-			pauseMusic.loadEmbedded(Paths.music(songName), true, true);
-		} else if (songName != 'None') {
-			pauseMusic.loadEmbedded(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)), true, true);
-		}
-		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
-
-		FlxG.sound.list.add(pauseMusic);
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
@@ -84,48 +51,21 @@ class PauseSubState extends MusicBeatSubstate
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
-		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.difficultyString();
-		levelDifficulty.scrollFactor.set();
-		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
-		levelDifficulty.updateHitbox();
-		add(levelDifficulty);
-
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
+		var blueballedTxt:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
 		blueballedTxt.text = "Blueballed: " + PlayState.deathCounter;
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
 
-		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
-		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
-		practiceText.x = FlxG.width - (practiceText.width + 20);
-		practiceText.updateHitbox();
-		practiceText.visible = PlayState.instance.practiceMode;
-		add(practiceText);
-
-		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
-		chartingText.scrollFactor.set();
-		chartingText.setFormat(Paths.font('vcr.ttf'), 32);
-		chartingText.x = FlxG.width - (chartingText.width + 20);
-		chartingText.y = FlxG.height - (chartingText.height + 20);
-		chartingText.updateHitbox();
-		chartingText.visible = PlayState.chartingMode;
-		add(chartingText);
-
 		blueballedTxt.alpha = 0;
-		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
-		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
@@ -140,8 +80,6 @@ class PauseSubState extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		cantUnpause -= elapsed;
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
 
 		super.update(elapsed);
 		updateSkipTextStuff();
@@ -192,11 +130,12 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (accepted && (cantUnpause <= 0 || !ClientPrefs.controllerMode))
 		{
+			FlxG.sound.play(Paths.sound('confirmMenu'));
 			if (menuItems == difficultyChoices)
 			{
 				if(menuItems.length - 1 != curSelected && difficultyChoices.contains(daSelected)) {
 					var name:String = PlayState.SONG.song;
-					var poop = Highscore.formatSong(name, curSelected);
+					var poop = Paths.formatToSongPath(name) + CoolUtil.getDifficultyFilePath(curSelected);
 					PlayState.SONG = Song.loadFromJson(poop, name);
 					PlayState.storyDifficulty = curSelected;
 					MusicBeatState.resetState();
@@ -209,7 +148,7 @@ class PauseSubState extends MusicBeatSubstate
 				menuItems = menuItemsOG;
 				regenMenu();
 			}
-
+			
 			switch (daSelected)
 			{
 				case "Resume":
@@ -255,12 +194,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 
-					WeekData.loadTheFirstEnabledMod();
-					if(PlayState.isStoryMode) {
-						MusicBeatState.switchState(new StoryMenuState());
-					} else {
-						MusicBeatState.switchState(new FreeplayState());
-					}
+					MusicBeatState.switchState(new MainMenuState());
 					PlayState.cancelMusicFadeTween();
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
@@ -296,13 +230,6 @@ class PauseSubState extends MusicBeatSubstate
 		{
 			MusicBeatState.resetState();
 		}
-	}
-
-	override function destroy()
-	{
-		pauseMusic.destroy();
-
-		super.destroy();
 	}
 
 	function changeSelection(change:Int = 0):Void

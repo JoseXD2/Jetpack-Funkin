@@ -5,7 +5,6 @@ import lime.app.Future;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
 
@@ -98,7 +97,6 @@ class LoadingState extends MusicBeatState
 	}
 	
 	function checkLibrary(library:String) {
-		trace(Assets.hasLibrary(library));
 		if (Assets.getLibrary(library) == null)
 		{
 			@:privateAccess
@@ -159,7 +157,6 @@ class LoadingState extends MusicBeatState
 		if(weekDir != null && weekDir.length > 0 && weekDir != '') directory = weekDir;
 
 		Paths.setCurrentLevel(directory);
-		trace('Setting asset folder to ' + directory);
 
 		#if NO_PRELOAD_ALL
 		var loaded:Bool = false;
@@ -311,8 +308,6 @@ class MultiCallback
 	
 	inline function log(msg):Void
 	{
-		if (logId != null)
-			trace('$logId: $msg');
 	}
 	
 	public function getFired() return fired.copy();

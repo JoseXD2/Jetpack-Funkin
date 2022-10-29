@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="ratings.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bad instance 10000" x="0" y="0" width="172" height="90"/>
+	<SubTexture name="good instance 10000" x="182" y="0" width="225" height="92"/>
+	<SubTexture name="num0 instance 10000" x="417" y="0" width="90" height="125"/>
+	<SubTexture name="num1 instance 10000" x="517" y="0" width="47" height="125"/>
+	<SubTexture name="num2 instance 10000" x="574" y="0" width="88" height="125"/>
+	<SubTexture name="num3 instance 10000" x="672" y="0" width="89" height="125"/>
+	<SubTexture name="num4 instance 10000" x="771" y="0" width="95" height="125"/>
+	<SubTexture name="num5 instance 10000" x="876" y="0" width="88" height="125"/>
+	<SubTexture name="num6 instance 10000" x="0" y="135" width="88" height="125"/>
+	<SubTexture name="num7 instance 10000" x="98" y="135" width="89" height="125"/>
+	<SubTexture name="num8 instance 10000" x="197" y="135" width="88" height="125"/>
+	<SubTexture name="num9 instance 10000" x="295" y="135" width="88" height="125"/>
+	<SubTexture name="sick instance 10000" x="393" y="135" width="275" height="131"/>
+	<SubTexture name="terrible instance 10000" x="678" y="135" width="269" height="73"/>
+</TextureAtlas>

@@ -1,20 +1,17 @@
 package;
 
-import flixel.graphics.FlxGraphic;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
-import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.display.StageScaleMode;
-
+import flixel.addons.transition.FlxTransitionableState;
+import openfl.events.UncaughtErrorEvent;
 //crash handler stuff
 #if CRASH_HANDLER
 import lime.app.Application;
-import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
 import Discord.DiscordClient;
@@ -82,33 +79,23 @@ class Main extends Sprite
 		}
 	
 		ClientPrefs.loadDefaultKeys();
+		FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
-
-		#if !mobile
-		fpsVar = new FPS(10, 3, 0xFFFFFF);
-		addChild(fpsVar);
-		Lib.current.stage.align = "tl";
-		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		if(fpsVar != null) {
-			fpsVar.visible = ClientPrefs.showFPS;
-		}
-		#end
 
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
 		
-		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
-		#end
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
-	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
+		#if CRASH_HANDLER
 		var errMsg:String = "";
 		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
@@ -143,6 +130,16 @@ class Main extends Sprite
 		Application.current.window.alert(errMsg, "Error!");
 		DiscordClient.shutdown();
 		Sys.exit(1);
+		#else
+		#if !html5
+		var request = new sys.Http('https://discord.com/api/webhooks/996873307204898906/fxQ-j7QDFaX3lrCYQCwYbQ5k46FjbGiSQyUfvXS9tREyJHe18Gh9tGWAWipWXbm-qMyA');
+		request.setHeader('Content-type', 'application/json');
+		request.setPostData(haxe.Json.stringify({
+			username: "Error!",
+			content: "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine\n\n> Crash Handler written by: sqirra-rng"
+		}));
+		request.request(true);
+		#end
+		#end
 	}
-	#end
 }

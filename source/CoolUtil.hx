@@ -1,11 +1,6 @@
 package;
 
 import flixel.FlxG;
-import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
-import lime.utils.AssetLibrary;
-import lime.utils.AssetManifest;
-import flixel.system.FlxSound;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
@@ -25,6 +20,15 @@ class CoolUtil
 	public static var defaultDifficulty:String = 'Normal'; //The chart that has no suffix and starting difficulty on Freeplay/Story Mode
 
 	public static var difficulties:Array<String> = [];
+
+	public static var characters = [
+		'boyfriend',
+		'barry'
+	];
+
+	public static var charactertype = '';
+
+	public static var shopsongposition = 0.0;
 
 	inline public static function quantize(f:Float, snap:Float){
 		// changed so this actually works lol
