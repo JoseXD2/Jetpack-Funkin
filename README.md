@@ -2,10 +2,9 @@
 this is the source code for the mod "jetpack funkin'" that has you battling against barry from jetpack joyride
 
 # Mod Credits:
-[The White Ninja](https://linktr.ee/the_white_ninja)
-[hNation](https://www.youtube.com/channel/UCqWC8U5f0qhK7xTVReq0Ptg)
+[The White Ninja](https://linktr.ee/the_white_ninja), 
+[hNation](https://www.youtube.com/channel/UCqWC8U5f0qhK7xTVReq0Ptg), 
 [Cally Cobble](https://www.youtube.com/c/CallyCobble)
-[Falcon God 1033](https://twitter.com/FGod1033)
 
 # Mod Special Thanks:
 [Half Brick](https://www.halfbrick.com/)
