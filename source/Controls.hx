@@ -688,7 +688,7 @@ class Controls extends FlxActionSet
 				mergeKeyboardScheme(controls.keyboardScheme);
 		}
 	}
-
+#if !android
 	inline public function copyTo(controls:Controls, ?device:Device)
 	{
 		controls.copyFrom(this, device);
