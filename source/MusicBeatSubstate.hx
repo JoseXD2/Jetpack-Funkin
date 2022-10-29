@@ -1,6 +1,6 @@
 package;
 
-import FlxG;
+import flixel.FlxG;
 import flixel.FlxSubState;
 #if android
 import android.flixel.FlxVirtualPad;
