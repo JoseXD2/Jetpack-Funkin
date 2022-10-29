@@ -19,7 +19,7 @@
 
 	<classpath name="source" />
 
-	<define name="CRASH_HANDLER" if="desktop release" />
+	<define name="CRASH_HANDLER" if="desktop release || android" />
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3"  unless="web"/>
@@ -34,6 +34,7 @@
 	<assets path="assets/songs"         library="songs"         exclude="*.ogg" if="web"/>
 	<assets path="assets/songs"         library="songs"         exclude="*.mp3" unless="web"/>
 	<assets path="assets/fonts" embed='true'/>
+	<assets path="assets/android" if="android"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 	<haxelib name="flixel" />
 	<haxedev set='webgl' />
