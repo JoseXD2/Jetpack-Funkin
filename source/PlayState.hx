@@ -721,6 +721,11 @@ class PlayState extends MusicBeatState {
 		botplayTxt.cameras = [camHUD];
 		startingSong = true;
 
+		#if android
+                addAndroidControls();
+	androidControls.visible = true;
+                #end		
+				
 		var daSong:String = Paths.formatToSongPath(curSong);
 
 		if(!startedCountdown) {
