@@ -690,7 +690,7 @@ class Controls extends FlxActionSet
 				mergeKeyboardScheme(controls.keyboardScheme);
 		}
 	}
-#if !android
+
 	inline public function copyTo(controls:Controls, ?device:Device)
 	{
 		controls.copyFrom(this, device);
@@ -710,7 +710,7 @@ class Controls extends FlxActionSet
 		}
 	}
 
-	
+	#if !android
 	public function bindKeys(control:Control, keys:Array<FlxKey>)
 	{
 		var copyKeys:Array<FlxKey> = keys.copy();
